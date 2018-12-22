@@ -2,17 +2,16 @@
 import json
 import io
 import requests
-from PIL import Image
 import random
 import time
 import cv2
 import os
 import sys
-
+from PIL import Image
 
 
 def find_faces(imagePath):
-    cascPath = "haarcascade_frontalface_default.xml"
+    cascPath = "image_processing/haarcascade_frontalface_default.xml"
 
     # Create the haar cascade
     faceCascade = cv2.CascadeClassifier(cascPath)
@@ -68,12 +67,18 @@ def swap_faces(faces, base_image):
 
 
 def process_image(image_filepath):
-    faces, base_image = find_faces(image_filepath)
+    try:
+        faces, base_image = find_faces(image_filepath)
+    except:
+        print ("no faces found, try again")
+        return
     if len(faces) > 1:
         new_image = swap_faces(faces, base_image)
         new_image.save("swapped_{}".format(image_filepath))
+        return "swapped_{}".format(image_filepath)
     else:
         print ("not enough faces found")
+
 
 
 
